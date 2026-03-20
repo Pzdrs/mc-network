@@ -12,7 +12,17 @@
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jib.container.creationTime>EPOCH</jib.container.creationTime>
     </properties>
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <jib.container.creationTime>USE_CURRENT_TIMESTAMP</jib.container.creationTime>
+            </properties>
+        </profile>
+    </profiles>
 
     <dependencies>
         <dependency>
@@ -24,7 +34,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.4.14</version>
+            <version>1.5.13</version>
         </dependency>
     </dependencies>
 
@@ -51,7 +61,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>cz.pycrs.lobbyserver.LobbyServer</mainClass> <!--Change this to your main class-->
+                            <mainClass>cz.pycrs.lobbyserver.LobbyServer</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
@@ -76,6 +86,9 @@
                     <to>
                         <image>lobby-server</image>
                     </to>
+                    <container>
+                        <creationTime>${jib.container.creationTime}</creationTime>
+                    </container>
                 </configuration>
             </plugin>
         </plugins>

@@ -1,0 +1,22 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lobby-server
+  namespace: mc-network
+spec:
+  selector:
+    matchLabels:
+      app: lobby-server
+  template:
+    metadata:
+      labels:
+        app: lobby-server
+    spec:
+      containers:
+      - name: lobby-server
+        image:  lobby-server:latest
+        imagePullPolicy: Never
+        resources: {}
+        ports:
+        - containerPort: 25565

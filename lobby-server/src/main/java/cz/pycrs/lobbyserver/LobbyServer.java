@@ -32,7 +32,6 @@ public class LobbyServer {
         });
 
         MinecraftServer.getCommandManager().register(new LobbyCommand());
-
         minecraftServer.start("0.0.0.0", 25565);
     }
 }
