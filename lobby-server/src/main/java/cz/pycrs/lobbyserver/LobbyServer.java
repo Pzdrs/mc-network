@@ -1,5 +1,6 @@
 package cz.pycrs.lobbyserver;
 
+import cz.pycrs.lobbyserver.commands.LobbyCommand;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
@@ -26,6 +27,8 @@ public class LobbyServer {
             event.setSpawningInstance(instanceContainer);
             player.setRespawnPoint(new Pos(0, 42, 0));
         });
+
+        MinecraftServer.getCommandManager().register(new LobbyCommand());
 
         minecraftServer.start("0.0.0.0", 25565);
     }
