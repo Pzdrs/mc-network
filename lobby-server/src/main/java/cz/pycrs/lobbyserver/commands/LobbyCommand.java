@@ -5,6 +5,7 @@ import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
+import net.minestom.server.entity.Player;
 
 public class LobbyCommand extends Command {
     public LobbyCommand() {
@@ -21,7 +22,12 @@ public class LobbyCommand extends Command {
     }
 
     private void onDefault(CommandSender sender, CommandContext ctx) {
-        sender.sendMessage("Sending to random lobby");
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage("Only players can use this command.");
+            return;
+        }
+
+        player.sendMessage("Sending to random lobby");
     }
 
     private void onList(CommandSender sender, CommandContext ctx) {
@@ -29,7 +35,12 @@ public class LobbyCommand extends Command {
     }
 
     private void onSendSpecific(CommandSender sender, CommandContext ctx) {
-        sender.sendMessage("Sending to lobby " + ctx.get("lobby"));
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage("Only players can use this command.");
+            return;
+        }
+
+        player.sendMessage("Sending to lobby " + ctx.get("lobby"));
     }
 
 }

@@ -1,6 +1,7 @@
 package cz.pycrs.lobbyserver;
 
 import cz.pycrs.lobbyserver.commands.LobbyCommand;
+import net.minestom.server.Auth;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
@@ -8,17 +9,19 @@ import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
+import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
 
 public class LobbyServer {
     public static void main(String[] args) {
-        MinecraftServer minecraftServer = MinecraftServer.init();
+        MinecraftServer minecraftServer = MinecraftServer.init(new Auth.Online());
 
         InstanceManager instanceManager = MinecraftServer.getInstanceManager();
         InstanceContainer instanceContainer = instanceManager.createInstanceContainer();
 
         // Set the ChunkGenerator
         instanceContainer.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.GRASS_BLOCK));
+        instanceContainer.setChunkSupplier(LightingChunk::new);
 
         // Add an event callback to specify the spawning instance (and the spawn position)
         GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
