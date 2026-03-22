@@ -1,6 +1,12 @@
 package cz.pycrs.lobbyserver;
 
+import build.buf.gen.minekube.gate.v1.GateServiceGrpc;
+import build.buf.gen.minekube.gate.v1.ListServersRequest;
+import build.buf.gen.minekube.gate.v1.ListServersResponse;
+import build.buf.gen.minekube.gate.v1.RegisterServerRequest;
 import cz.pycrs.lobbyserver.commands.LobbyCommand;
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
 import net.minestom.server.Auth;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
@@ -14,7 +20,13 @@ import net.minestom.server.instance.block.Block;
 
 public class LobbyServer {
     public static void main(String[] args) {
-        MinecraftServer minecraftServer = MinecraftServer.init(new Auth.Online());
+        MinecraftServer minecraftServer = MinecraftServer.init(new Auth.Velocity("velocity_secret"));
+        ManagedChannel channel = ManagedChannelBuilder
+                .forAddress("localhost", 8080)
+                .usePlaintext()
+                .build();
+
+        GateServiceGrpc.GateServiceBlockingStub stub = GateServiceGrpc.newBlockingStub(channel);
 
         InstanceManager instanceManager = MinecraftServer.getInstanceManager();
         InstanceContainer instanceContainer = instanceManager.createInstanceContainer();
@@ -31,7 +43,7 @@ public class LobbyServer {
             player.setRespawnPoint(new Pos(0, 42, 0));
         });
 
-        MinecraftServer.getCommandManager().register(new LobbyCommand());
+        MinecraftServer.getCommandManager().register(new LobbyCommand(stub));
         minecraftServer.start("0.0.0.0", 25565);
     }
 }

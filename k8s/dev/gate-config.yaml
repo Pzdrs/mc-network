@@ -1,0 +1,24 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gate-config
+data:
+  config.yaml: |
+    api:
+      enabled: true
+      bind: 0.0.0.0:8080
+    config:
+      bind: 0.0.0.0:25565
+      servers:
+        server0: lobby-0.lobbies.default.svc.cluster.local:25565
+        server1: lobby-1.lobbies.default.svc.cluster.local:25565
+        server2: lobby-2.lobbies.default.svc.cluster.local:25565
+      try:
+        - server0
+        - server1
+        - server2
+
+      forwarding:
+        mode: velocity
+        velocitySecret: velocity_secret

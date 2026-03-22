@@ -1,5 +1,7 @@
 package cz.pycrs.lobbyserver.commands;
 
+import build.buf.gen.minekube.gate.v1.ConnectPlayerRequest;
+import build.buf.gen.minekube.gate.v1.GateServiceGrpc;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
@@ -8,8 +10,11 @@ import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
 import net.minestom.server.entity.Player;
 
 public class LobbyCommand extends Command {
-    public LobbyCommand() {
+    private final GateServiceGrpc.GateServiceBlockingStub stub;
+
+    public LobbyCommand(GateServiceGrpc.GateServiceBlockingStub stub) {
         super("lobby");
+        this.stub = stub;
 
         setDefaultExecutor(this::onDefault);
 
@@ -41,6 +46,12 @@ public class LobbyCommand extends Command {
         }
 
         player.sendMessage("Sending to lobby " + ctx.get("lobby"));
+        var request = ConnectPlayerRequest.newBuilder()
+                .setPlayer(player.getUuid().toString())
+                .setServer("server" + ctx.get("lobby"))
+                        .build();
+
+        var response = stub.connectPlayer(request);
     }
 
 }

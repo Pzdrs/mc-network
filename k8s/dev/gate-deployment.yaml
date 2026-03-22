@@ -1,0 +1,31 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gate
+spec:
+  selector:
+    matchLabels:
+      app: gate
+  template:
+    metadata:
+      labels:
+        app: gate
+    spec:
+      containers:
+        - name: gate
+          image: ghcr.io/minekube/gate:latest
+          resources: {}
+          ports:
+            - name: game
+              containerPort: 25565
+            - name: api
+              containerPort: 8080
+          volumeMounts:
+            - name: gate-config
+              subPath: config.yaml
+              mountPath: /config.yml
+      volumes:
+        - name: gate-config
+          configMap:
+            name: gate-config

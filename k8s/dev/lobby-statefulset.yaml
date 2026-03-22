@@ -1,0 +1,22 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: lobby
+spec:
+  serviceName: lobbies 
+  replicas: 3
+  selector:
+    matchLabels:
+      app: lobby
+  template:
+    metadata:
+      labels:
+        app: lobby
+    spec:
+      containers:
+        - name: minecraft
+          image: lobby-server:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 25565
